@@ -5,21 +5,21 @@
 #include <string>
 
 // Include winsock headers firstly!
-#include <socket_wrapper/socket_headers.h>
+#include "socket_wrapper/socket_headers.h"
 
 #if !defined(WIN32)
 //For ETH_P_ALL, ETH__P_IP, etc...
 #    include <netinet/if_ether.h>
 #endif
 
-#include <socket_wrapper/socket_wrapper.h>
-#include <socket_wrapper/socket_class.h>
+#include "socket_wrapper/socket_wrapper.h"
+#include "socket_wrapper/socket_class.h"
 
 
 class Sniffer
 {
 public:
-    Sniffer(const std::string &if_name, const std::string &pcap_filename, const socket_wrapper::SocketWrapper &sock_wrap) :
+    Sniffer(const std::string& if_name, const std::string& pcap_filename, const socket_wrapper::SocketWrapper& sock_wrap) :
         if_name_(if_name), pcap_filename_(pcap_filename), sock_wrap_(sock_wrap),
 #if defined(WIN32)
         sock_(AF_INET, SOCK_RAW, IPPROTO_IP),
@@ -53,7 +53,7 @@ private:
 
     const std::string if_name_;
     const std::string pcap_filename_;
-    const socket_wrapper::SocketWrapper &sock_wrap_;
+    const socket_wrapper::SocketWrapper& sock_wrap_;
     socket_wrapper::Socket sock_;
 
     std::ofstream of_;

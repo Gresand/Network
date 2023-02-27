@@ -20,9 +20,9 @@ const auto IFNAMSIZ = 16;
 
 #if !defined(WIN32)
 // *nix only.
-struct ifreq get_ifr(const std::string &if_name, int sock)
+struct ifreq get_ifr(const std::string& if_name, int sock)
 {
-    struct ifreq ifr = {0};
+    struct ifreq ifr = { 0 };
     std::copy(if_name.begin(), if_name.end(), ifr.ifr_name);
 
     if (-1 == ioctl(sock, SIOCGIFINDEX, &ifr))
@@ -59,7 +59,7 @@ auto get_if_address(const std::string& if_name, int sock)
 #else
 auto get_if_address(const std::string& if_name, int sock)
 {
-    struct sockaddr_in sa = { .sin_family = PF_INET, .sin_port = 0 };
+    struct sockaddr_in sa = { sa.sin_family = PF_INET, sa.sin_port = 0 };
     inet_pton(AF_INET, if_name.c_str(), &sa.sin_addr);
 
     return sa;
@@ -124,7 +124,7 @@ bool Sniffer::bind_socket()
 bool Sniffer::switch_promisc(bool enabled)
 {
 #if defined(WIN32)
-   // Give us ALL IPv4 packets sent and received to the specific IP address.
+    // Give us ALL IPv4 packets sent and received to the specific IP address.
     int value = enabled ? RCVALL_ON : RCVALL_OFF;
     DWORD out = 0;
 
@@ -155,17 +155,17 @@ bool Sniffer::switch_promisc(bool enabled)
     }
 #endif
 
-   return true;
+    return true;
 }
 
 
 bool Sniffer::write_pcap_header()
 {
-	if (!of_)
+    if (!of_)
     {
-		std::cerr << "\"" << pcap_filename_ << "\"" << "failed [" << errno << "]." << std::endl;
-		return false;
-	}
+        std::cerr << "\"" << pcap_filename_ << "\"" << "failed [" << errno << "]." << std::endl;
+        return false;
+    }
 
     of_.exceptions(std::ifstream::failbit);
 
@@ -194,7 +194,7 @@ bool Sniffer::capture()
 {
     // First 14 bytes are a fake ethernet header with IPv4 as the protocol.
     // `char` type is using for the compatibility with Windows.
-    char buffer[BUFFER_SIZE_HDR + BUFFER_SIZE_PKT] = {0};
+    char buffer[BUFFER_SIZE_HDR + BUFFER_SIZE_PKT] = { 0 };
     // 0x08 - IP protocol type in the Ethernet frame protocolol type field (offset = 12).
     buffer[BUFFER_OFFSET_ETH + ethernet_proto_type_offset] = 0x08;
     struct pcap_sf_pkthdr* pkt = reinterpret_cast<struct pcap_sf_pkthdr*>(buffer);
@@ -258,4 +258,3 @@ bool Sniffer::stop_capture()
 
     return true;
 }
-
